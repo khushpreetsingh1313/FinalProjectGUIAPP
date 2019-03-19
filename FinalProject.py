@@ -76,7 +76,6 @@ def insert(self):
     print("Author is Khushpreet Singh")
     with con:
         cur = con.cursor()
-        #cur.execute("DROP TABLE IF EXISTS flowers")
         cur.execute("create table IF not exists flowers(id INTEGER PRIMARY KEY AUTOINCREMENT ,Species VARCHAR(70) , c_year INTEGER, Julian_Day_of_Year INTEGER,  Plant_Identification_Number INTEGER,  Number_of_Buds INTEGER,  Number_of_Flowers INTEGER,  Number_of_Flowers_that_have_Reached_Maturity INTEGER,  Observer_Initials VARCHAR(20),  Observer_Comments VARCHAR(20))")
         cur.execute(
             'INSERT INTO flowers (Species,c_year,Julian_Day_of_Year,Plant_Identification_Number,Number_of_Buds,Number_of_Flowers,Number_of_Flowers_that_have_Reached_Maturity,Observer_Initials,Observer_Comments) VALUES (?,?,?,?,?,?,?,?,?)',
@@ -101,6 +100,15 @@ def insert(self):
             Lb1.insert(END, str(row[0]).ljust(15) + str(row[1]).ljust(25) + str(row[2]).ljust(20) + str(row[3]).ljust(
                 50) + str(row[4]).ljust(50) + str(row[5]).ljust(40) + str(row[6]).ljust(50) + str(row[7]).ljust(
                 70) + str(row[8]).ljust(40) + str(row[9]))
+        species_text.delete(0, END)
+        year_text.delete(0, END)
+        Day_text.delete(0, END)
+        Identification_text.delete(0, END)
+        Buds_text.delete(0, END)
+        flowers_text.delete(0, END)
+        Maturity_text.delete(0, END)
+        Initials_text.delete(0, END)
+        Comments_text.delete(0, END)
         msgbox.insert(END,"Data Row inserted in database table..........")
         print("list updated")
     return "data saved"
@@ -182,6 +190,15 @@ def updaterow(self):
             Lb1.insert(END, str(row[0]).ljust(15) + str(row[1]).ljust(25) + str(row[2]).ljust(20) + str(row[3]).ljust(
                 50) + str(row[4]).ljust(50) + str(row[5]).ljust(40) + str(row[6]).ljust(50) + str(row[7]).ljust(
                 70) + str(row[8]).ljust(40) + str(row[9]))
+        species_text.delete(0, END)
+        year_text.delete(0, END)
+        Day_text.delete(0, END)
+        Identification_text.delete(0, END)
+        Buds_text.delete(0, END)
+        flowers_text.delete(0, END)
+        Maturity_text.delete(0, END)
+        Initials_text.delete(0, END)
+        Comments_text.delete(0, END)
         print("data updtaed")
         msgbox.insert(END,"Row updated & listbox is also updated.....")
 
@@ -300,25 +317,35 @@ Search_text = Entry(root)
 Search_text.grid(row=13, column=1,sticky=S)
 
 update = Button(root, text="update", anchor=N,bg="black",fg="#006366")
-update["bg"] = "green"
 
-update.grid(row=15, column=1,sticky=NW)
+update.grid(row=14, column=1,sticky=SW)
 update.bind("<Button-1>", updaterow)
 
 delete = Button(root, text="Delete", anchor=N)
-delete.grid(row=15, column=1,sticky=NE)
+delete.grid(row=14, column=1,sticky=SE)
 delete.bind("<Button-1>", deleterow)
 Lb1 = Listbox(width = 100)
 
 Lb1.grid(row=0,column=2, rowspan=12,
     padx=5, sticky=E+W+S+N)
-Lb1.insert(END,"Please click on 'insert from csv' button")
+Lb1.insert(END,"Please click on 'insert from csv' button first & this listbox will display data......!!")
+Lb1.itemconfig(END, foreground="RED")
 
 msgbox = Listbox(width = 50)
 msgbox.grid(row=13,column=2, rowspan=2, sticky=E+W+S+N)
+msgbox.insert(END,"This will display notify the user about operations......!!")
+
 
 namebox = Listbox(width = 50)
 namebox.grid(row=13,column=0, rowspan=2, sticky=E+W+S+N)
+namebox.insert(END,"1. Developed by Khushpreet Singh")
+namebox.insert(END,"2. User will load data from csv")
+namebox.insert(END,"3. User can submit with entry fields")
+namebox.insert(END,"4. User can delete by seraching with ID")
+namebox.insert(END,"5. User can Update data by seraching with ID")
+namebox.insert(END,"6. Insert from CSV highly recommended")
+
+
 
 root.mainloop()
 
