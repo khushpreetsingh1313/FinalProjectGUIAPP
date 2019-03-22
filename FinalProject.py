@@ -12,6 +12,11 @@ listBoxList = []
 
 class FinalProject:
 
+    def __init__(self):
+        self.searchData()
+        self.insert()
+
+
     def loadcsv(self):
         """this loadcsv function read csv and creating connection as well as inserting row in database. It is also populating
         the listbox from database"""
@@ -29,6 +34,7 @@ class FinalProject:
 
             con = GUIdb.connect("FinalProject.db")  # connection with database
             print("Author is Khushpreet Singh")
+            print("CSV file data inserted into database loaded sucessfully")
 
             with con:
                 cur = con.cursor() # cursor object
@@ -66,7 +72,7 @@ class FinalProject:
                         row[7]).ljust(10) + str(row[8]).ljust(10) + str(row[9]))
                 msgbox.insert(END,"Data from csv file loaded in database sucessfully.Now you can perform operations on data")
         except:
-            print("error loadig file. may be file missing")
+            print("try except block.")
         return "CSVloaded"
 
 
@@ -82,10 +88,11 @@ class FinalProject:
             cur.execute("create table IF not exists flowers(id INTEGER PRIMARY KEY AUTOINCREMENT ,Species VARCHAR(70) , c_year INTEGER, Julian_Day_of_Year INTEGER,  Plant_Identification_Number INTEGER,  Number_of_Buds INTEGER,  Number_of_Flowers INTEGER,  Number_of_Flowers_that_have_Reached_Maturity INTEGER,  Observer_Initials VARCHAR(20),  Observer_Comments VARCHAR(20))")
             """inserting new row in database"""
             cur.execute(
-                'INSERT INTO flowers (Species,c_year,Julian_Day_of_Year,Plant_Identification_Number,Number_of_Buds,Number_of_Flowers,Number_of_Flowers_that_have_Reached_Maturity,Observer_Initials,Observer_Comments) VALUES (?,?,?,?,?,?,?,?,?)',
+                'INSERT INTO flowers (Species,c_year,Julian_Day_of_Year,Plant_Identification_Number,Number_of_Buds,Number_of_Flowers,'
+                'Number_of_Flowers_that_have_Reached_Maturity,Observer_Initials,Observer_Comments) VALUES (?,?,?,?,?,?,?,?,?)',
                 [(species_text.get()), (year_text.get()), (Day_text.get()),
-                                 (Identification_text.get()), (Buds_text.get()), (flowers_text.get()),
-                                 (Maturity_text.get()), (Initials_text.get()), (Comments_text.get())])
+                (Identification_text.get()), (Buds_text.get()), (flowers_text.get()),
+                (Maturity_text.get()), (Initials_text.get()), (Comments_text.get())])
             cur.execute("SELECT * FROM flowers;")
             data = cur.fetchall()
             """clearing datalistbox"""
@@ -214,7 +221,7 @@ class FinalProject:
             Maturity_text.delete(0, END)
             Initials_text.delete(0, END)
             Comments_text.delete(0, END)
-            print("data updtaed")
+            print("data updated")
             msgbox.insert(END,"Row with id = "+id+" is updated & listbox is also updated.....")
 
         return "Rowupdated"
@@ -266,119 +273,119 @@ class FinalProject:
         Comments_text.delete(0, END)
 
         return "Row_deleted"
+if __name__ == '__main__':
+
+    """main desktop GUI window for widgets"""
+    root = Tk()
+    root.title("FinalProject 1.0.1 by KhushPreet Singh")
+    """info label"""
+    info = Label(root,text="fill the fields to insert data & click on submit")
+    info.grid(row=0,column =0,sticky=W)
+
+    """species label and entry fields is placed in root with help of grid"""
+    species = Label(root,text="species")
+    species.grid(row=1,column =0,sticky=W)
+    species_text = Entry(root)
+    species_text.grid(row=1,column=1)
+
+    """year label and entry field"""
+    year = Label(root, text="Year")
+    year.grid(row=2, column=0,sticky=W)
+    year_text = Entry(root)
+    year_text.grid(row=2, column=1)
+
+    """day label and entry field"""
+    Day = Label(root, text="Julian Day of Year")
+    Day.grid(row=3, column=0,sticky=W)
+    Day_text = Entry(root)
+    Day_text.grid(row=3, column=1)
+
+    """Plant Identification Number label and entry field"""
+    Identification = Label(root, text="Plant Identification Number")
+    Identification.grid(row=4, column=0,sticky=W)
+    Identification_text = Entry(root)
+    Identification_text.grid(row=4, column=1)
+
+    """number of buds label and entry field"""
+    buds = Label(root, text="Number of Buds")
+    buds.grid(row=5, column=0,sticky=W)
+    Buds_text = Entry(root)
+    Buds_text.grid(row=5, column=1)
+
+    """number of flowers label and entry field"""
+    flower = Label(root, text="Number of Flowers")
+    flower.grid(row=6, column=0,sticky=W)
+    flowers_text = Entry(root)
+    flowers_text.grid(row=6, column=1)
+
+    """Number of Flowers that have Reached Maturity label and entry field"""
+    Maturity = Label(root, text="Number of Flowers that have Reached Maturity")
+    Maturity.grid(row=7, column=0,sticky=W)
+    Maturity_text = Entry(root)
+    Maturity_text.grid(row=7, column=1)
+
+    """Observer Initials label and entry field"""
+    Initials = Label(root, text="Observer Initials")
+    Initials.grid(row=8, column=0,sticky=W)
+    Initials_text = Entry(root)
+    Initials_text.grid(row=8, column=1)
+
+    """Observer comments label and entry field"""
+    Comments = Label(root, text="Observer Comments")
+    Comments.grid(row=9, column=0,sticky=W)
+    Comments_text = Entry(root)
+    Comments_text.grid(row=9, column=1)
 
 
-"""main desktop GUI window for widgets"""
-root = Tk()
-root.title("FinalProject 1.0.1 by KhushPreet Singh")
-"""info label"""
-info = Label(root,text="fill the fields to insert data & click on submit")
-info.grid(row=0,column =0,sticky=W)
+    """submit buttond calling insert method when clicked"""
+    submit = Button(root,text="Submit",anchor=CENTER)
+    submit.grid(row=11, column=1,sticky=EW)
+    submit.bind('<Button-1>', FinalProject.insert)
 
-"""species label and entry fields is placed in root with help of grid"""
-species = Label(root,text="species")
-species.grid(row=1,column =0,sticky=W)
-species_text = Entry(root)
-species_text.grid(row=1,column=1)
+    """csvButton loads data from csv when clicked by calling loadcsv function"""
+    csvButton = Button(root, text="insert from csv", anchor=CENTER)
+    csvButton.grid(row=12, column=1,sticky=EW)
+    csvButton.bind("<Button-1>", FinalProject.loadcsv)
 
-"""year label and entry field"""
-year = Label(root, text="Year")
-year.grid(row=2, column=0,sticky=W)
-year_text = Entry(root)
-year_text.grid(row=2, column=1)
+    """Search button calls searchData method and populate entry fields for deleting and updation"""
+    Search = Button(root, text="serachID")
+    Search.grid(row=14, column=1,sticky=N)
+    Search.bind("<Button-1>", FinalProject.searchData)
+    """serach entry field"""
+    Search_text = Entry(root)
+    Search_text.grid(row=13, column=1,sticky=S)
 
-"""day label and entry field"""
-Day = Label(root, text="Julian Day of Year")
-Day.grid(row=3, column=0,sticky=W)
-Day_text = Entry(root)
-Day_text.grid(row=3, column=1)
+    """update button calls updaterow method for updating data into database"""
+    update = Button(root, text="update",fg="#006366")
+    update.grid(row=14, column=1,sticky=SW)
+    update.bind("<Button-1>", FinalProject.updaterow)
 
-"""Plant Identification Number label and entry field"""
-Identification = Label(root, text="Plant Identification Number")
-Identification.grid(row=4, column=0,sticky=W)
-Identification_text = Entry(root)
-Identification_text.grid(row=4, column=1)
+    """delete Button calls deleterow method to delete data from database"""
+    delete = Button(root, text="Delete", anchor=N)
+    delete.grid(row=14, column=1,sticky=SE)
+    delete.bind("<Button-1>", FinalProject.deleterow)
+    DatalistBox = Listbox(width = 100)
 
-"""number of buds label and entry field"""
-buds = Label(root, text="Number of Buds")
-buds.grid(row=5, column=0,sticky=W)
-Buds_text = Entry(root)
-Buds_text.grid(row=5, column=1)
+    """list box shows the data when user will perform CRUD operations"""
+    DatalistBox.grid(row=0,column=2, rowspan=12,padx=5, sticky=E+W+S+N)
+    DatalistBox.insert(END,"Please click on 'insert from csv' button first & this listbox will display data......!!")
+    DatalistBox.itemconfig(END, foreground="RED")
 
-"""number of flowers label and entry field"""
-flower = Label(root, text="Number of Flowers")
-flower.grid(row=6, column=0,sticky=W)
-flowers_text = Entry(root)
-flowers_text.grid(row=6, column=1)
+    """gives updates to user when any operation performed on database table"""
+    msgbox = Listbox(width = 50)
+    msgbox.grid(row=13,column=2, rowspan=2, sticky=E+W+S+N)
+    msgbox.insert(END,"This will display notify the user about operations......!!")
 
-"""Number of Flowers that have Reached Maturity label and entry field"""
-Maturity = Label(root, text="Number of Flowers that have Reached Maturity")
-Maturity.grid(row=7, column=0,sticky=W)
-Maturity_text = Entry(root)
-Maturity_text.grid(row=7, column=1)
+    """name box gives instructions to user"""
+    namebox = Listbox(width = 50)
+    namebox.grid(row=13,column=0, rowspan=2, sticky=E+W+S+N)
+    namebox.insert(END,"1. Developed by Khushpreet Singh")
+    namebox.insert(END,"2. User will load data from csv")
+    namebox.insert(END,"3. User can submit with entry fields")
+    namebox.insert(END,"4. User can Update data by seraching with ID")
+    namebox.insert(END,"5. User can delete by seraching with ID")
+    namebox.insert(END,"6. Insert from CSV is highly recommended for better result")
 
-"""Observer Initials label and entry field"""
-Initials = Label(root, text="Observer Initials")
-Initials.grid(row=8, column=0,sticky=W)
-Initials_text = Entry(root)
-Initials_text.grid(row=8, column=1)
-
-"""Observer comments label and entry field"""
-Comments = Label(root, text="Observer Comments")
-Comments.grid(row=9, column=0,sticky=W)
-Comments_text = Entry(root)
-Comments_text.grid(row=9, column=1)
-
-
-"""submit buttond calling insert method when clicked"""
-submit = Button(root,text="Submit",anchor=CENTER)
-submit.grid(row=11, column=1,sticky=EW)
-submit.bind('<Button-1>', FinalProject.insert)
-
-"""csvButton loads data from csv when clicked by calling loadcsv function"""
-csvButton = Button(root, text="insert from csv", anchor=CENTER)
-csvButton.grid(row=12, column=1,sticky=EW)
-csvButton.bind("<Button-1>", FinalProject.loadcsv)
-
-"""Search button calls searchData method and populate entry fields for deleting and updation"""
-Search = Button(root, text="serachID")
-Search.grid(row=14, column=1,sticky=N)
-Search.bind("<Button-1>", FinalProject.searchData)
-"""serach entry field"""
-Search_text = Entry(root)
-Search_text.grid(row=13, column=1,sticky=S)
-
-"""update button calls updaterow method for updating data into database"""
-update = Button(root, text="update",fg="#006366")
-update.grid(row=14, column=1,sticky=SW)
-update.bind("<Button-1>", FinalProject.updaterow)
-
-"""delete Button calls deleterow method to delete data from database"""
-delete = Button(root, text="Delete", anchor=N)
-delete.grid(row=14, column=1,sticky=SE)
-delete.bind("<Button-1>", FinalProject.deleterow)
-DatalistBox = Listbox(width = 100)
-
-"""list box shows the data when user will perform CRUD operations"""
-DatalistBox.grid(row=0,column=2, rowspan=12,padx=5, sticky=E+W+S+N)
-DatalistBox.insert(END,"Please click on 'insert from csv' button first & this listbox will display data......!!")
-DatalistBox.itemconfig(END, foreground="RED")
-
-"""gives updates to user when any operation performed on database table"""
-msgbox = Listbox(width = 50)
-msgbox.grid(row=13,column=2, rowspan=2, sticky=E+W+S+N)
-msgbox.insert(END,"This will display notify the user about operations......!!")
-
-"""name box gives instructions to user"""
-namebox = Listbox(width = 50)
-namebox.grid(row=13,column=0, rowspan=2, sticky=E+W+S+N)
-namebox.insert(END,"1. Developed by Khushpreet Singh")
-namebox.insert(END,"2. User will load data from csv")
-namebox.insert(END,"3. User can submit with entry fields")
-namebox.insert(END,"4. User can Update data by seraching with ID")
-namebox.insert(END,"5. User can delete by seraching with ID")
-namebox.insert(END,"6. Insert from CSV is highly recommended for better result")
-
-root.mainloop()
+    root.mainloop()
 
 
